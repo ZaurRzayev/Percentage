@@ -1,56 +1,38 @@
 <?php
 
 namespace App\Http\Controllers\Api\V1;
+
 use App\Http\Controllers\Controller;
+use App\Models\Percentage;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
-use App\Http\Controllers\Request\StorePercentageRequest;
-use App\Http\Controllers\Request\UpdatePercentageRequest;
-use App\Http\Resources\PercentageResource;
-use App\Models\percentage;
-use http\Client\Request;
-
-class PercentageController extends Controller{
-    public function index(){
-        return PercentageResource::collection(Percentage::all());
-    }
-
-    public function show(Percentage $percentage){
-        return PercentageResource::make($percentage);
-    }
-
-    public function store(StorePercentageRequest $request){
-
-        $percentage= percentage::create($request->validated());
-
-        return PercentageResource::make($percentage);
-    }
-
-    public function messages()
+class PercentageController extends Controller
+{
+    public function update(Request $request, $id)
     {
-        return [
-            'name.required' => 'The name field is required.',
+        // Validation
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|integer',
+            'bracket_string' => 'required|string',
+        ]);
 
-        ];
-    }
+        if ($validator->fails()) {
+            return response()->json(['error' => true, 'message' => $validator->errors()], 422);
+        }
 
-//    public function update(UpdatePercentageRequest $request, Percentage $percentage){
-//
-//        $percentage->update($request->validated());
-//        return PercentageResource::make($percentage);
-//
-//    }
-
-    public function update(percentage $request, $id)
-    {
         try {
+            // Find the percentage entry
             $percentage = Percentage::findOrFail($id);
+
+            // Update fields
             $percentage->user_id = $request->input('user_id');
             $percentage->bracket_string = $request->input('bracket_string');
-            $percentage->percentage = $this->calculatePercentage($percentage); // Example function
+            $percentage->percentage = $this->calculatePercentage($request->input('bracket_string'));
             $percentage->save();
 
             return response()->json([
-                'percentage' => $percentage,
+                'percentage' => $percentage->percentage,
                 'message' => 'Percentage updated successfully'
             ]);
         } catch (\Exception $e) {
@@ -58,10 +40,11 @@ class PercentageController extends Controller{
         }
     }
 
-    private function calculatePercentage($percentage)
+    private function calculatePercentage($bracketString)
     {
         // Custom logic to calculate percentage
-        return 75; // Example percentage
+        // Example: Calculate the length of the bracket string as a percentage
+        return strlen($bracketString); // Example calculation
     }
-
 }
+

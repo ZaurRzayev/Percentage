@@ -12,6 +12,8 @@ Route::prefix('v1')->group(function () {
     Route::patch('/percentages/{percentage}/complete', CompletePercentageController::class);
     Route::get('/profile', [UserProfileController::class, 'show'])->name('profile.show');
     Route::post('/profile', [UserProfileController::class, 'update'])->name('profile.update');
+    Route::middleware(['auth:sanctum'])->patch('/v1/percentages/{id}/complete', [PercentageController::class, 'update']);
+
 });
 
 Route::get('/user', function (Request $request) {
