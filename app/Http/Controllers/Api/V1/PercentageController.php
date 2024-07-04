@@ -7,6 +7,7 @@ use App\Http\Controllers\Request\StorePercentageRequest;
 use App\Http\Controllers\Request\UpdatePercentageRequest;
 use App\Http\Resources\PercentageResource;
 use App\Models\percentage;
+use http\Client\Request;
 
 class PercentageController extends Controller{
     public function index(){
@@ -32,16 +33,35 @@ class PercentageController extends Controller{
         ];
     }
 
-    public function update(UpdatePercentageRequest $request, Percentage $percentage){
+//    public function update(UpdatePercentageRequest $request, Percentage $percentage){
+//
+//        $percentage->update($request->validated());
+//        return PercentageResource::make($percentage);
+//
+//    }
 
-        $percentage->update($request->validated());
-        return PercentageResource::make($percentage);
+    public function update(percentage $request, $id)
+    {
+        try {
+            $percentage = Percentage::findOrFail($id);
+            $percentage->user_id = $request->input('user_id');
+            $percentage->bracket_string = $request->input('bracket_string');
+            $percentage->percentage = $this->calculatePercentage($percentage); // Example function
+            $percentage->save();
 
+            return response()->json([
+                'percentage' => $percentage,
+                'message' => 'Percentage updated successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => true, 'message' => $e->getMessage()], 500);
+        }
     }
 
-    public  function destroy(Percentage $percentage){
-        $percentage->delete();
-        return response()->noContent();
+    private function calculatePercentage($percentage)
+    {
+        // Custom logic to calculate percentage
+        return 75; // Example percentage
     }
 
 }
