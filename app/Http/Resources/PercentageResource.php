@@ -7,19 +7,18 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class PercentageResource extends JsonResource
 {
-
-
     /**
      * Transform the resource into an array.
      *
-     * @return array<string, mixed>
+     * @param  Request  $request
+     * @return array
      */
-    public function toArray(Request $request): array
+    public function toArray($request)
     {
         return [
-            'id'=>$this->id,
-            'name'=>$this->name,
-            'percentage'=>(double) $this->percentage
+            'id' => $this->id,
+            'name' => $this->name,
+            'percentage' => (double) $this->percentage,
         ];
     }
 }
