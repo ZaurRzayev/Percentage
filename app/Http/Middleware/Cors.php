@@ -22,6 +22,6 @@ class Cors
             ->header('Access-Control-Allow-Headers', 'X-Requested-With,Content-Type,X-Token-Auth,Authorization')
             ->header('Accept', 'application/json')
             ->header('path', 'api/*')
-            ->header('path', 'dashboard/*');
+            ->header('path', 'dashboard/');
     }
 }
