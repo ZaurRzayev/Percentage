@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PercentageResource;
-use App\Models\Percentage;
+use App\Models\percentage;
 use Illuminate\Http\Request;
 
 class CompletePercentageController extends Controller
