@@ -12,10 +12,32 @@ class CompletePercentageController extends Controller
     /**
      * Handle the incoming request.
      */
+//    public function __invoke(Request $request, $percentage_id)
+//    {
+//        // Find the percentage record by ID
+//        $percentage = Percentage::findOrFail($percentage_id);
+//
+//        // Parse the bracket string and update the percentage
+//        $percentage->percentage = $this->calculateFilledPercentage($request->input('bracket_string'));
+//        $percentage->save();
+//
+//        // Return the updated percentage resource
+//        return new PercentageResource($percentage);
+//    }
+
+
     public function __invoke(Request $request, $percentage_id)
     {
-        // Find the percentage record by ID
-        $percentage = Percentage::findOrFail($percentage_id);
+        // Find the percentage record by ID or create a new one if not found
+        $percentage = Percentage::firstOrNew(['id' => $percentage_id]);
+
+        // If the percentage is a new instance (not retrieved from database)
+        if (!$percentage->exists) {
+            // Optionally, initialize any default values for the new record
+            $percentage->percentage = 0; // Set default percentage
+            // Save the new percentage record
+            $percentage->save();
+        }
 
         // Parse the bracket string and update the percentage
         $percentage->percentage = $this->calculateFilledPercentage($request->input('bracket_string'));
