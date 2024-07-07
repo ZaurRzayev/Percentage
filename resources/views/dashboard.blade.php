@@ -43,7 +43,7 @@
         responseElement.textContent = 'Loading...';
 
         try {
-            const response = await fetch(`http://64.226.121.124/api/v1/percentages/${percentageId}/complete`, {
+            const response = await fetch(`http://127.0.0.1:8000/api/v1/percentages/${percentageId}/complete`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
