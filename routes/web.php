@@ -14,6 +14,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [UserProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [UserProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile/{user}', [UserProfileController::class, 'update'])->name('profile.update');
+    Route::get('/login', 'Auth\LoginController@showLoginForm')->name('login');
+
 });
 
 require __DIR__.'/auth.php';
