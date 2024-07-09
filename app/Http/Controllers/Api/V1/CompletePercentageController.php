@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PercentageResource;
 use App\Models\percentage;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
 class CompletePercentageController extends Controller
@@ -49,6 +50,18 @@ class CompletePercentageController extends Controller
         $percentage->percentage = $this->calculateFilledPercentage($request->input('bracket_string'));
         $percentage->save();
 
+        $client = new \GuzzleHttp\Client([
+            'verify' => false,
+        ]);
+        $response = $client->put('https://api.adalo.com/v0/apps/0fb25ec4-853d-487d-a48e-bb871341619a/collections/t_66ad570ab2cf4e91b74569e7becda694/1' . $percentage_id, [
+            'json' => ([
+                'Percentage' => $percentage,
+            ]),
+            'headers' => [
+                'Authorization' => 'Bearer 5ckiny17el2vymy81icxgnsbu'
+            ]
+        ]);
+
         // Return the updated percentage resource
         return new PercentageResource($percentage);
     }
@@ -77,6 +90,8 @@ class CompletePercentageController extends Controller
         } else {
             $percentage = 0; // Default percentage if no slots
         }
+
+
 
         return $percentage;
     }
