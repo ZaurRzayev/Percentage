@@ -15,7 +15,7 @@ Route::prefix('v1')->group(function () {
     Route::post('/profile', [UserProfileController::class, 'update'])->name('profile.update');
     Route::middleware(['auth:sanctum'])->patch('/v1/percentages/{id}/complete', [PercentageController::class, 'update']);
 
-    Route::post('/save-notification', [PostController::class, 'saveNotification']);
+    Route::post('/save-notification', [PostController::class, 'save']);
 });
 
 Route::get('/user', function (Request $request) {
