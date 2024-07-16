@@ -99,30 +99,9 @@
 
         <button type="submit">Generate Notification</button>
     </form>
-
     @if (isset($notificationMessage))
         <div id="output">{{ $notificationMessage }}</div>
     @endif
-
-    <div id="output"></div>
 </div>
-<script>
-    document.getElementById('notificationMessage').addEventListener('click', function() {
-        const UserFullName = document.getElementById('UserFullName').value;
-        const NewDate = document.getElementById('NewDate').value;
-        const PostTitle = document.getElementById('PostTitle').value;
-        const PostId = document.getElementById('PostId').value;
-        const BusinessName = document.getElementById('BusinessName').value;
-        const UserId = document.getElementById('UserId').value;
-        const BusinessId = document.getElementById('BusinessId').value;
-        const jobId = document.getElementById('jobId').value;
-
-        const notificationMessage = `Congratulations! ${UserFullName} accepted to ${BusinessName} in ${NewDate} to ${PostTitle}. Accepted by ${PostId}.`;
-
-        const outputDiv = document.getElementById('output');
-        outputDiv.innerText = notificationMessage;
-        outputDiv.style.display = 'block';
-    });
-</script>
 </body>
 </html>
