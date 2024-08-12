@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\UserProfileController;
 use App\Http\Controllers\Api\V1\PostController;
+use App\Http\Controllers\JobController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -9,11 +10,15 @@ Route::get('/', function () {
 });
 Route::get('/dashboard', function () {
     return view('dashboard');
+
 })->name('dashboard');
+
+Route::post('/send-id', [JobController::class, 'sendId']);
+
 
 Route::get('/', [PostController::class, 'index']);
 Route::post('/save', [PostController::class, 'save']);
-
+Route::post('/send-id', [JobController::class, 'sendId']);
 Route::middleware(['auth'])->group(function () {
 //    Route::get('/profile', [UserProfileController::class, 'show'])->name('profile.show');
 //    Route::get('/profile/edit', [UserProfileController::class, 'edit'])->name('profile.edit');
