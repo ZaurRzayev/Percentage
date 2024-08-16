@@ -14,22 +14,25 @@ class ApplicantApprove implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $postApplicantId;
+    private int $postApplicantId;
 
     public function __construct($postApplicantId)
     {
-        $this->postApplicantId = $postApplicantId;
+        // Ensure postApplicantId is treated as an integer
+        $this->postApplicantId = (int) $postApplicantId;
     }
 
     public function handle(): void
     {
-        $request->validate([
-            'postApplicantId' => 'required|integer',
-        ]);
-        $client = new \GuzzleHttp\Client();
-        $postApplicantId = $request->postApplicantId;
+        // Manual validation, though casting ensures it's already an integer
+        if (!is_int($this->postApplicantId)) {
+            throw new \InvalidArgumentException('postApplicantId must be an integer');
+        }
 
-        $body = "Çatmısansa, indi daxil ol və \"Sifarişə başla\" düyməsini sıx. Ödənişi ala bilmək üçün düyməni sıxmalısan. Uğurlar!🔥";
+        $client = new \GuzzleHttp\Client();
+        $postApplicantId = $this->postApplicantId;
+
+        $body = "Tester mesajı🔥";
 
         $url = 'https://api.adalo.com/notifications';
         $headers = [
@@ -41,7 +44,7 @@ class ApplicantApprove implements ShouldQueue
             'appId' => '0fb25ec4-853d-487d-a48e-bb871341619a',
             'audience' => ['id' => $postApplicantId],
             'notification' => [
-                'titleText' => 'Sifarişin 5 dəqiqəyə başlayır ⌛',
+                'titleText' => 'Test işlədi! ⌛',
                 'bodyText' => $body,
             ],
         ];
@@ -49,7 +52,8 @@ class ApplicantApprove implements ShouldQueue
         $response = $client->post($url, [
             'headers' => $headers,
             'json' => $data,
+            'verify' => false, // Disable SSL certificate verification
         ]);
-    }
 
+    }
 }
